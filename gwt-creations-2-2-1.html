@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="referrer" content="no-referrer">
+<title>GWT CREATIONS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    background: #050506;
+    min-height: 100vh;
+    color: #f2eeee;
+    padding: 24px 20px;
+    position: relative;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- Battlefield / gaming-console background layers ---- */
+  #bg-fx {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 12% 18%, rgba(90,95,90,0.15) 0, rgba(90,95,90,0.15) 7%, transparent 8%),
+      radial-gradient(circle at 78% 8%, rgba(70,75,70,0.12) 0, rgba(70,75,70,0.12) 9%, transparent 10%),
+      radial-gradient(circle at 90% 55%, rgba(60,70,65,0.14) 0, rgba(60,70,65,0.14) 11%, transparent 12%),
+      radial-gradient(circle at 25% 85%, rgba(80,85,75,0.12) 0, rgba(80,85,75,0.12) 8%, transparent 9%),
+      radial-gradient(circle at 55% 40%, rgba(50,55,55,0.1) 0, rgba(50,55,55,0.1) 14%, transparent 15%),
+      radial-gradient(ellipse at 50% 105%, rgba(6,214,209,0.09), transparent 55%),
+      radial-gradient(ellipse at 50% -5%, rgba(6,214,209,0.06), transparent 50%),
+      linear-gradient(180deg, #060406 0%, #0c0708 45%, #060406 100%);
+  }
+  /* Hex-grid HUD overlay */
+  #bg-fx::before {
+    content: "";
+    position: absolute;
+    inset: -10%;
+    opacity: 0.35;
+    background-image:
+      linear-gradient(30deg, rgba(6,214,209,0.05) 1px, transparent 1px),
+      linear-gradient(150deg, rgba(6,214,209,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(6,214,209,0.03) 1px, transparent 1px);
+    background-size: 46px 80px, 46px 80px, 46px 80px;
+  }
+  /* Slow radar sweep */
+  #bg-fx::after {
+    content: "";
+    position: absolute;
+    top: -35vw; right: -35vw;
+    width: 70vw; height: 70vw;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, rgba(6,214,209,0.1), transparent 25%);
+    animation: radarSpin 11s linear infinite;
+    opacity: 0.4;
+  }
+  @keyframes radarSpin { to { transform: rotate(360deg); } }
+
+  /* Subtle film-grain texture for a matte premium finish */
+  .grain-fx {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  /* CRT scanlines */
+  .scanlines {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px,
+      transparent 1px, transparent 3px
+    );
+    mix-blend-mode: overlay;
+  }
+  /* Vignette */
+  .vignette {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.72) 100%);
+  }
+  /* Crosshair watermark */
+  .crosshair-fx {
+    position: fixed; bottom: -60px; right: -60px; z-index: 0; pointer-events: none;
+    width: 320px; height: 320px; opacity: 0.05;
+  }
+  .crosshair-fx svg { width: 100%; height: 100%; }
+
+  /* Generic soldier silhouette (bottom-left) */
+  .soldier-fx {
+    position: fixed; bottom: 0; left: -20px; z-index: 0; pointer-events: none;
+    width: 260px; height: 420px; opacity: 0.08;
+  }
+  .soldier-fx svg { width: 100%; height: 100%; }
+
+  /* Generic game-controller silhouette (top-right) */
+  .controller-fx {
+    position: fixed; top: 30px; right: 20px; z-index: 0; pointer-events: none;
+    width: 150px; height: 100px; opacity: 0.07;
+  }
+  .controller-fx svg { width: 100%; height: 100%; }
+
+  /* Generic parachute silhouette (top-left, drifting animation) */
+  .parachute-fx {
+    position: fixed; top: 60px; left: 6vw; z-index: 0; pointer-events: none;
+    width: 110px; height: 140px; opacity: 0.06;
+    animation: driftFx 12s ease-in-out infinite;
+  }
+  .parachute-fx svg { width: 100%; height: 100%; }
+  @keyframes driftFx {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(18px) translateX(-10px); }
+  }
+
+  .container { max-width: 720px; margin: 0 auto; position: relative; z-index: 2; }
+  .view { display: none; animation: fadeIn 0.4s cubic-bezier(0.16,1,0.3,1); }
+  .view.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------- Brand header ---------- */
+  .brand-wrap { text-align: center; margin-bottom: 8px; }
+  .logo-badge {
+    width: 84px; height: 84px; margin: 0 auto 10px;
+    filter: drop-shadow(0 0 14px rgba(6,214,209,0.35));
+    animation: logoFloat 4s ease-in-out infinite;
+  }
+  @keyframes logoFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); filter: drop-shadow(0 0 14px rgba(6,214,209,0.35)); }
+    50% { transform: translateY(-6px) rotate(2deg); filter: drop-shadow(0 0 22px rgba(6,214,209,0.55)); }
+  }
+  .logo-badge svg { width: 100%; height: 100%; }
+  .brand {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: 5px;
+    background: linear-gradient(90deg, #06d6d1 0%, #ffffff 25%, #e7c469 50%, #ffffff 75%, #06d6d1 100%);
+    background-size: 250% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 30px rgba(6,214,209,0.35);
+    margin: 0;
+    animation: shimmer 5s linear infinite;
+  }
+  @keyframes shimmer {
+    0% { background-position: 0% 50%; }
+    100% { background-position: -250% 50%; }
+  }
+  .brand-divider { display: flex; justify-content: center; margin: 14px auto; opacity: 0.9; }
+  .brand-divider svg { width: 160px; height: 20px; }
+  .brand-sub {
+    text-align: center;
+    color: #8a8b8f;
+    margin: 0 0 40px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .founder-tag {
+    text-align: center;
+    font-size: 12px;
+    color: #5f6c73;
+    margin-bottom: 34px;
+    letter-spacing: 0.5px;
+  }
+  .founder-tag b { color: #06d6d1; font-weight: 600; }
+
+  /* ---------- Menu cards ---------- */
+  .menu-cards { display: flex; flex-direction: column; gap: 18px; }
+  .menu-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: linear-gradient(155deg, rgba(24,17,18,0.9), rgba(10,8,9,0.95));
+    border: 1px solid rgba(6,214,209,0.18);
+    border-radius: 18px;
+    padding: 22px 24px;
+    text-align: left;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 12px 24px rgba(0,0,0,0.35);
+    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), border-color 0.3s, box-shadow 0.3s;
+    animation: cardIn 0.6s cubic-bezier(0.16,1,0.3,1) backwards;
+  }
+  .menu-card:nth-child(1) { animation-delay: 0.05s; }
+  .menu-card:nth-child(2) { animation-delay: 0.15s; }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .menu-card::after {
+    content: "";
+    position: absolute; inset: 0; border-radius: 18px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(231,196,105,0.5), transparent 40%, rgba(6,214,209,0.4));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  .menu-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(6,214,209,0.4);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.05) inset, 0 20px 40px rgba(0,0,0,0.5), 0 0 30px rgba(6,214,209,0.1);
+  }
+  .menu-card:active { transform: translateY(-1px) scale(0.99); }
+  .menu-icon {
+    flex-shrink: 0;
+    width: 58px; height: 58px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    background: radial-gradient(circle at 35% 30%, rgba(6,214,209,0.25), rgba(0,0,0,0.4));
+    border: 1px solid rgba(6,214,209,0.35);
+    box-shadow: 0 0 18px rgba(6,214,209,0.2) inset, 0 4px 10px rgba(0,0,0,0.4);
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s;
+  }
+  .menu-card:hover .menu-icon {
+    transform: scale(1.1) rotate(-6deg);
+    box-shadow: 0 0 26px rgba(6,214,209,0.4) inset, 0 4px 14px rgba(0,0,0,0.5);
+  }
+  .menu-text { flex: 1; }
+  .menu-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px; font-weight: 700; margin-bottom: 4px;
+    color: #fff;
+    letter-spacing: 1.2px;
+  }
+  .menu-sub { font-size: 12.5px; color: #9a9ba0; line-height: 1.4; }
+  .menu-arrow {
+    flex-shrink: 0; color: #06d6d1; font-size: 20px; opacity: 0.7;
+    transition: transform 0.3s;
+  }
+  .menu-card:hover .menu-arrow { transform: translateX(4px); opacity: 1; }
+
+  /* ---------- Our Work columns ---------- */
+  .work-heading {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px; font-weight: 700; letter-spacing: 2px;
+    color: #8f9498; text-align: center;
+    margin: 40px 0 18px;
+  }
+  .work-heading span { color: #06d6d1; }
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .work-col {
+    background: linear-gradient(155deg, rgba(20,15,16,0.85), rgba(8,7,8,0.9));
+    border: 1px solid rgba(6,214,209,0.14);
+    border-radius: 14px;
+    padding: 16px 12px;
+    text-align: center;
+    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), border-color 0.3s, box-shadow 0.3s;
+    animation: cardIn 0.6s cubic-bezier(0.16,1,0.3,1) backwards;
+  }
+  .work-col:nth-child(1) { animation-delay: 0.25s; }
+  .work-col:nth-child(2) { animation-delay: 0.32s; }
+  .work-col:nth-child(3) { animation-delay: 0.39s; }
+  .work-col:hover {
+    transform: translateY(-4px);
+    border-color: rgba(6,214,209,0.4);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.4), 0 0 20px rgba(6,214,209,0.12);
+  }
+  .work-icon { font-size: 22px; margin-bottom: 8px; transition: transform 0.3s; }
+  .work-col:hover .work-icon { transform: scale(1.15); }
+  .work-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.6px;
+    color: #fff; margin-bottom: 6px;
+  }
+  .work-desc { font-size: 11px; line-height: 1.4; color: #9a9ba0; }
+  @media (max-width: 420px) {
+    .work-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- Buttons ---------- */
+  .back-btn {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #d8d9dc;
+    padding: 9px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  }
+  .back-btn:hover { background: rgba(6,214,209,0.1); border-color: rgba(6,214,209,0.3); color: #fff; }
+  .back-btn:active { transform: scale(0.96); }
+
+  h1.page-title, h2.page-title {
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 23px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    background: linear-gradient(180deg, #ffffff, #e7c469 60%, #06d6d1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  p.sub { text-align: center; color: #8a8b8f; margin-top: 0; margin-bottom: 28px; font-size: 13px; }
+
+  /* ---------- Name style generator ---------- */
+  .input-box { display: flex; gap: 12px; margin-bottom: 26px; }
+  input[type="text"] {
+    flex: 1; padding: 15px 18px;
+    border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+    font-size: 15px; outline: none;
+    background: rgba(255,255,255,0.96); color: #16171a;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    transition: box-shadow 0.2s;
+  }
+  input[type="text"]::placeholder { color: #8a8b8f; }
+  input[type="text"]:focus { box-shadow: 0 0 0 3px rgba(6,214,209,0.3), 0 4px 14px rgba(0,0,0,0.25); }
+  button.generate-btn {
+    padding: 15px 26px; border: none; border-radius: 12px;
+    background: linear-gradient(135deg, #28f0e6, #0891a8);
+    color: #fff; font-weight: 700; cursor: pointer; font-size: 14px;
+    letter-spacing: 0.6px;
+    box-shadow: 0 8px 20px rgba(8,145,168,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  button.generate-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(8,145,168,0.5); }
+  button.generate-btn:active { transform: translateY(0) scale(0.97); }
+
+  .results { display: flex; flex-direction: column; gap: 11px; max-height: 60vh; overflow-y: auto; padding-right: 4px; }
+  .style-card {
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px; padding: 14px 16px;
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  }
+  .style-card:hover { border-color: rgba(6,214,209,0.35); background: rgba(6,214,209,0.05); transform: translateX(2px); }
+  .style-text { font-size: 17px; word-break: break-word; flex: 1; color: #f2eeee; }
+  .copy-btn {
+    background: rgba(6,214,209,0.1); border: 1px solid rgba(6,214,209,0.35); color: #5eead4;
+    padding: 7px 15px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; white-space: nowrap;
+    letter-spacing: 0.4px;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .copy-btn:hover { background: rgba(6,214,209,0.2); }
+  .copy-btn:active { transform: scale(0.94); }
+  .copy-btn.copied { background: rgba(45,201,110,0.15); border-color: #2dc96e; color: #4ade80; }
+  .empty-msg { text-align: center; color: #64656a; padding: 34px 0; font-size: 14px; }
+
+  /* ---------- Phone grid ---------- */
+  .phone-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+    gap: 13px;
+  }
+  .phone-card {
+    background: linear-gradient(155deg, rgba(24,17,18,0.9), rgba(10,8,9,0.95));
+    border: 1px solid rgba(6,214,209,0.16);
+    border-radius: 14px;
+    padding: 20px 12px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: #e4e5e8;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+    transition: transform 0.2s cubic-bezier(0.16,1,0.3,1), border-color 0.2s, box-shadow 0.2s;
+  }
+  .phone-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(6,214,209,0.45);
+    box-shadow: 0 16px 28px rgba(0,0,0,0.45), 0 0 22px rgba(6,214,209,0.12);
+  }
+  .phone-card:active { transform: translateY(-1px) scale(0.98); }
+  .phone-icon {
+    width: 44px; height: 44px; margin: 0 auto 10px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    background: radial-gradient(circle at 35% 30%, rgba(6,214,209,0.2), rgba(0,0,0,0.4));
+    border: 1px solid rgba(6,214,209,0.3);
+  }
+
+  /* ---------- Sensitivity detail ---------- */
+  .sens-list { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+  .sens-row {
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 14px 16px;
+    transition: border-color 0.2s;
+  }
+  .sens-row:hover { border-color: rgba(6,214,209,0.3); }
+  .sens-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 9px; }
+  .sens-label { font-size: 13.5px; color: #c9cad0; font-weight: 600; letter-spacing: 0.5px; }
+  .sens-value {
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #28f0e6, #0891a8);
+    padding: 3px 13px;
+    border-radius: 6px;
+    font-size: 13.5px;
+    box-shadow: 0 3px 8px rgba(8,145,168,0.4);
+  }
+  .sens-bar-track {
+    width: 100%; height: 6px; border-radius: 4px;
+    background: rgba(255,255,255,0.06); overflow: hidden;
+  }
+  .sens-bar-fill {
+    height: 100%; border-radius: 4px;
+    background: linear-gradient(90deg, #0891a8, #28f0e6, #e7c469);
+    box-shadow: 0 0 10px rgba(6,214,209,0.5);
+  }
+  .disclaimer {
+    font-size: 11.5px;
+    color: #64656a;
+    text-align: center;
+    margin-top: 24px;
+    line-height: 1.7;
+  }
+  footer {
+    text-align: center;
+    color: #64656a;
+    font-size: 11.5px;
+    margin-top: 38px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    letter-spacing: 0.5px;
+  }
+  footer b { color: #06d6d1; }
+
+  /* Scrollbar polish */
+  .results::-webkit-scrollbar { width: 6px; }
+  .results::-webkit-scrollbar-thumb { background: rgba(6,214,209,0.3); border-radius: 3px; }
+
+  /* ---------- Wave column: a dedicated vertical strip of bars pulsing up/down ---------- */
+  .wave-column {
+    position: fixed; top: 0; bottom: 0; z-index: 0; pointer-events: none;
+    width: 46px;
+    display: flex; flex-direction: row; align-items: center; justify-content: center;
+    gap: 4px;
+    opacity: 0.28;
+  }
+  .wave-column.wave-left { left: 0; }
+  .wave-column.wave-right { right: 0; }
+  .wave-bar {
+    width: 4px; border-radius: 3px;
+    background: linear-gradient(180deg, #28f0e6, #e7c469);
+    animation: wavePulse 1.3s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes wavePulse {
+    0%, 100% { transform: scaleY(0.25); opacity: 0.5; }
+    50% { transform: scaleY(1); opacity: 1; }
+  }
+
+  /* ---------- Stat chips ---------- */
+  .stats-strip { display: flex; justify-content: center; gap: 10px; margin: 0 0 30px; flex-wrap: wrap; }
+  .stat-chip {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(6,214,209,0.06);
+    border: 1px solid rgba(6,214,209,0.22);
+    border-radius: 30px;
+    padding: 7px 14px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+    color: #c9e9e7;
+    animation: cardIn 0.6s cubic-bezier(0.16,1,0.3,1) backwards;
+  }
+  .stat-chip:nth-child(1) { animation-delay: 0.1s; }
+  .stat-chip:nth-child(2) { animation-delay: 0.18s; }
+  .stat-chip:nth-child(3) { animation-delay: 0.26s; }
+  .stat-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #06d6d1; box-shadow: 0 0 8px #06d6d1; flex-shrink: 0; }
+
+  /* ---------- Search box ---------- */
+  .search-box { position: relative; margin-bottom: 20px; }
+  .search-box input[type="search"] {
+    width: 100%; padding: 13px 16px 13px 40px;
+    border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+    font-size: 14px; outline: none;
+    background: rgba(255,255,255,0.04); color: #f2eeee;
+    transition: border-color 0.2s, background 0.2s;
+    font-family: 'Poppins', sans-serif;
+  }
+  .search-box input[type="search"]::placeholder { color: #6a6b70; }
+  .search-box input[type="search"]:focus { border-color: rgba(6,214,209,0.5); background: rgba(6,214,209,0.05); }
+  .search-box::before {
+    content: "⌕"; position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: #5eead4; font-size: 17px; pointer-events: none;
+  }
+  .no-results { text-align: center; color: #64656a; padding: 24px 0; font-size: 13px; grid-column: 1 / -1; }
+
+  /* ---------- Results toolbar / copy-all ---------- */
+  .results-toolbar { display: flex; justify-content: flex-end; margin: -14px 0 14px; }
+  .copy-all-btn {
+    background: rgba(231,196,105,0.08); border: 1px solid rgba(231,196,105,0.35); color: #e7c469;
+    padding: 7px 14px; border-radius: 8px; cursor: pointer; font-size: 11.5px; font-weight: 600;
+    letter-spacing: 0.4px; display: none; align-items: center; gap: 5px;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .copy-all-btn.visible { display: inline-flex; }
+  .copy-all-btn:hover { background: rgba(231,196,105,0.16); }
+  .copy-all-btn:active { transform: scale(0.95); }
+
+  /* ---------- Favorite star on style cards ---------- */
+  .fav-btn {
+    background: none; border: none; cursor: pointer; font-size: 17px; line-height: 1;
+    color: #4a4b50; padding: 4px; flex-shrink: 0; transition: color 0.2s, transform 0.15s;
+  }
+  .fav-btn:hover { transform: scale(1.15); }
+  .fav-btn.active { color: #e7c469; text-shadow: 0 0 10px rgba(231,196,105,0.6); }
+  .style-card.pinned { border-color: rgba(231,196,105,0.4); background: rgba(231,196,105,0.04); }
+
+  /* ---------- Toast ---------- */
+  .toast {
+    position: fixed; left: 50%; bottom: 26px; z-index: 50;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(14,12,13,0.95); border: 1px solid rgba(6,214,209,0.35);
+    color: #f2eeee; padding: 12px 20px; border-radius: 12px;
+    font-size: 13px; font-weight: 500; letter-spacing: 0.3px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.5), 0 0 20px rgba(6,214,209,0.15);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s, transform 0.25s;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ---------- Scroll to top ---------- */
+  .scrolltop-btn {
+    position: fixed; right: 18px; bottom: 22px; z-index: 40;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: linear-gradient(135deg, #28f0e6, #0891a8);
+    border: none; color: #04161a; font-size: 17px; font-weight: 900; cursor: pointer;
+    box-shadow: 0 8px 20px rgba(8,145,168,0.45);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transform: translateY(10px);
+    transition: opacity 0.25s, transform 0.25s;
+  }
+  .scrolltop-btn.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  .scrolltop-btn:active { transform: scale(0.92); }
+
+  /* ---------- Feature grid (2-column, Wynko-style) ---------- */
+  .feature-section { margin: 46px 0 40px; }
+  .eyebrow {
+    text-align: center; font-size: 10.5px; font-weight: 700; letter-spacing: 3px;
+    color: #06d6d1; text-transform: uppercase; margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .eyebrow::before, .eyebrow::after {
+    content: ""; width: 26px; height: 1px; background: rgba(6,214,209,0.4);
+  }
+  .feature-heading {
+    text-align: center; font-family: 'Orbitron', sans-serif;
+    font-size: 21px; font-weight: 800; letter-spacing: 0.5px;
+    color: #f2eeee; margin: 0 0 10px; line-height: 1.4;
+  }
+  .feature-heading span {
+    background: linear-gradient(90deg, #06d6d1, #e7c469);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .feature-lede {
+    text-align: center; color: #8a8b8f; font-size: 13px; line-height: 1.6;
+    max-width: 480px; margin: 0 auto 32px;
+  }
+  .feature-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+  }
+  @media (max-width: 460px) {
+    .feature-grid { grid-template-columns: 1fr; }
+  }
+  .feature-card {
+    background: linear-gradient(155deg, rgba(20,15,16,0.85), rgba(8,7,8,0.9));
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 22px 20px;
+    text-align: left;
+    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), border-color 0.3s, box-shadow 0.3s;
+    animation: cardIn 0.6s cubic-bezier(0.16,1,0.3,1) backwards;
+  }
+  .feature-grid .feature-card:nth-child(1) { animation-delay: 0.05s; }
+  .feature-grid .feature-card:nth-child(2) { animation-delay: 0.1s; }
+  .feature-grid .feature-card:nth-child(3) { animation-delay: 0.15s; }
+  .feature-grid .feature-card:nth-child(4) { animation-delay: 0.2s; }
+  .feature-grid .feature-card:nth-child(5) { animation-delay: 0.25s; }
+  .feature-grid .feature-card:nth-child(6) { animation-delay: 0.3s; }
+  .feature-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(6,214,209,0.35);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.4), 0 0 20px rgba(6,214,209,0.1);
+  }
+  .feature-icon-badge {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; margin-bottom: 14px;
+    background: rgba(6,214,209,0.12);
+    border: 1px solid rgba(6,214,209,0.3);
+    box-shadow: 0 0 14px rgba(6,214,209,0.15) inset;
+  }
+  .feature-card:nth-child(even) .feature-icon-badge {
+    background: rgba(231,196,105,0.1);
+    border-color: rgba(231,196,105,0.3);
+    box-shadow: 0 0 14px rgba(231,196,105,0.12) inset;
+  }
+  .feature-card-title {
+    font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.6px; color: #fff; margin-bottom: 7px;
+  }
+  .feature-card-desc { font-size: 12px; line-height: 1.6; color: #9a9ba0; }
+
+  /* ---------- Why choose us: comparison table ---------- */
+  .compare-section { margin: 0 0 44px; }
+  .compare-table {
+    display: flex; flex-direction: column; gap: 2px;
+    border-radius: 16px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    animation: cardIn 0.6s cubic-bezier(0.16,1,0.3,1) backwards;
+    animation-delay: 0.1s;
+  }
+  .compare-head {
+    display: grid; grid-template-columns: 1.3fr 0.85fr 0.85fr;
+    background: rgba(0,0,0,0.35);
+  }
+  .compare-head > div {
+    padding: 14px 10px; text-align: center;
+    font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.8px; text-transform: uppercase;
+  }
+  .compare-head .ch-label { text-align: left; color: #6a6b70; padding-left: 16px; }
+  .compare-head .ch-others { color: #9a9ba0; }
+  .compare-head .ch-us {
+    color: #04161a;
+    background: linear-gradient(135deg, #28f0e6, #e7c469);
+  }
+  .compare-row {
+    display: grid; grid-template-columns: 1.3fr 0.85fr 0.85fr;
+    background: rgba(14,12,13,0.75);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .compare-row > div { padding: 13px 10px; display: flex; align-items: center; justify-content: center; }
+  .compare-row .cr-label {
+    justify-content: flex-start; text-align: left; padding-left: 16px;
+    font-size: 12.5px; color: #c9cad0; font-weight: 500; line-height: 1.4;
+  }
+  .cr-mark { font-size: 15px; font-weight: 800; }
+  .cr-no { color: #6b5457; }
+  .cr-no::before { content: "✕"; }
+  .cr-yes { color: #06d6d1; text-shadow: 0 0 10px rgba(6,214,209,0.5); }
+  .cr-yes::before { content: "✓"; }
+  .compare-row .cr-us { background: rgba(6,214,209,0.04); }
+  @media (max-width: 380px) {
+    .compare-head > div, .compare-row > div { padding-left: 6px; padding-right: 6px; }
+    .compare-head .ch-label, .compare-row .cr-label { padding-left: 12px; }
+    .compare-head > div { font-size: 9.5px; }
+    .compare-row .cr-label { font-size: 11.5px; }
+  }
+
+  /* ---------- Founder section ---------- */
+  .founder-section { margin: 0 0 40px; }
+  .founder-card {
+    display: flex; align-items: center; gap: 18px;
+    background: linear-gradient(155deg, rgba(24,17,18,0.9), rgba(10,8,9,0.95));
+    border: 1px solid rgba(6,214,209,0.18);
+    border-radius: 18px;
+    padding: 22px 22px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 12px 24px rgba(0,0,0,0.35);
+    animation: cardIn 0.6s cubic-bezier(0.16,1,0.3,1) backwards;
+    animation-delay: 0.1s;
+  }
+  .founder-avatar {
+    flex-shrink: 0; width: 62px; height: 62px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    background: linear-gradient(135deg, rgba(6,214,209,0.15), rgba(231,196,105,0.12));
+    border: 1px solid rgba(6,214,209,0.35);
+    box-shadow: 0 0 16px rgba(6,214,209,0.2) inset;
+  }
+  .founder-name {
+    font-family: 'Orbitron', sans-serif; font-size: 15px; font-weight: 800;
+    color: #fff; letter-spacing: 0.4px; margin-bottom: 2px;
+  }
+  .founder-role {
+    font-size: 11.5px; color: #06d6d1; font-weight: 600;
+    letter-spacing: 0.4px; margin-bottom: 10px;
+  }
+  .founder-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+  .founder-tag-chip {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.3px;
+    color: #c9e9e7; background: rgba(6,214,209,0.08);
+    border: 1px solid rgba(6,214,209,0.25); border-radius: 20px;
+    padding: 5px 11px;
+  }
+  .founder-tag-chip:nth-child(even) {
+    color: #f3e3bd; background: rgba(231,196,105,0.08); border-color: rgba(231,196,105,0.25);
+  }
+</style>
+</head>
+<body>
+<div class="wave-column wave-left" id="waveLeft"></div>
+<div class="wave-column wave-right" id="waveRight"></div>
+<div id="bg-fx"></div>
+<div class="grain-fx"></div>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+<div class="crosshair-fx">
+  <svg viewBox="0 0 100 100" fill="none" stroke="#06d6d1" stroke-width="1.5">
+    <circle cx="50" cy="50" r="38"/>
+    <circle cx="50" cy="50" r="22"/>
+    <line x1="50" y1="2" x2="50" y2="20"/>
+    <line x1="50" y1="80" x2="50" y2="98"/>
+    <line x1="2" y1="50" x2="20" y2="50"/>
+    <line x1="80" y1="50" x2="98" y2="50"/>
+  </svg>
+</div>
+
+<!-- Generic battle-royale soldier silhouette, drawn with basic shapes -->
+<div class="soldier-fx">
+  <svg viewBox="0 0 200 320" fill="#06d6d1">
+    <ellipse cx="100" cy="46" rx="26" ry="28"/>
+    <path d="M74 40 a26 20 0 0 1 52 0 l4 10 h-60 z"/>
+    <rect x="88" y="70" width="24" height="18"/>
+    <path d="M55 96 q45 -22 90 0 l10 90 q-55 26 -110 0 z"/>
+    <rect x="40" y="110" width="18" height="80" rx="6"/>
+    <rect x="142" y="110" width="18" height="80" rx="6"/>
+    <rect x="150" y="70" width="90" height="10" rx="4"/>
+    <rect x="230" y="55" width="14" height="40" rx="2"/>
+    <rect x="70" y="188" width="26" height="110" rx="6"/>
+    <rect x="104" y="188" width="26" height="110" rx="6"/>
+  </svg>
+</div>
+
+<!-- Generic game controller silhouette -->
+<div class="controller-fx">
+  <svg viewBox="0 0 200 120" fill="#06d6d1">
+    <path d="M40 30 h120 a35 35 0 0 1 35 42 l-6 22 a18 18 0 0 1 -32 8 l-14 -16 h-86 l-14 16 a18 18 0 0 1 -32 -8 l-6 -22 a35 35 0 0 1 35 -42 z"/>
+    <circle cx="60" cy="60" r="12" fill="#050608"/>
+    <rect x="54" y="46" width="12" height="28" fill="#050608"/>
+    <rect x="46" y="54" width="28" height="12" fill="#050608"/>
+    <circle cx="150" cy="52" r="9" fill="#050608"/>
+    <circle cx="168" cy="70" r="9" fill="#050608"/>
+  </svg>
+</div>
+
+<!-- Generic parachute silhouette -->
+<div class="parachute-fx">
+  <svg viewBox="0 0 140 180" fill="none" stroke="#06d6d1" stroke-width="3">
+    <path d="M10 60 a60 55 0 0 1 120 0 z" fill="#06d6d1" stroke="none"/>
+    <line x1="20" y1="60" x2="45" y2="130"/>
+    <line x1="50" y1="60" x2="52" y2="130"/>
+    <line x1="90" y1="60" x2="88" y2="130"/>
+    <line x1="120" y1="60" x2="95" y2="130"/>
+    <rect x="42" y="130" width="56" height="30" rx="6" fill="#06d6d1" stroke="none"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <!-- HOME VIEW -->
+  <div class="view active" id="view-home">
+    <div class="brand-wrap">
+      <div class="logo-badge">
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="logoRing" x1="0" y1="0" x2="120" y2="120">
+              <stop offset="0" stop-color="#ffffff"/>
+              <stop offset="0.5" stop-color="#e7c469"/>
+              <stop offset="1" stop-color="#06d6d1"/>
+            </linearGradient>
+            <linearGradient id="logoText" x1="0" y1="0" x2="0" y2="120">
+              <stop offset="0" stop-color="#ffffff"/>
+              <stop offset="1" stop-color="#28f0e6"/>
+            </linearGradient>
+          </defs>
+          <polygon points="60,4 112,32 112,88 60,116 8,88 8,32" fill="#0a0a0c" stroke="url(#logoRing)" stroke-width="3"/>
+          <polygon points="60,16 102,38 102,82 60,104 18,82 18,38" fill="none" stroke="#06d6d1" stroke-width="1" opacity="0.45"/>
+          <text x="60" y="70" text-anchor="middle" font-family="Orbitron, sans-serif" font-weight="900" font-size="34" fill="url(#logoText)">GWT</text>
+        </svg>
+      </div>
+      <h1 class="brand">GWT CREATIONS</h1>
+    </div>
+    <div class="brand-divider">
+      <svg viewBox="0 0 160 20" fill="none">
+        <path d="M0 10 Q 10 0, 20 10 T 40 10 T 60 10 T 80 10 T 100 10 T 120 10 T 140 10 T 160 10"
+              stroke="url(#waveGrad)" stroke-width="2" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="waveGrad" x1="0" y1="0" x2="160" y2="0">
+            <stop offset="0" stop-color="#06d6d1" stop-opacity="0"/>
+            <stop offset="0.2" stop-color="#e7c469"/>
+            <stop offset="0.5" stop-color="#06d6d1"/>
+            <stop offset="0.8" stop-color="#e7c469"/>
+            <stop offset="1" stop-color="#06d6d1" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <p class="brand-sub">Choose an option below</p>
+    <div class="stats-strip">
+      <div class="stat-chip"><span class="dot"></span>Instant Results</div>
+      <div class="stat-chip"><span class="dot"></span>FF &amp; BGMI Ready</div>
+      <div class="stat-chip"><span class="dot"></span>100% Free</div>
+    </div>
+    <div class="menu-cards">
+      <div class="menu-card" onclick="showView('view-namestyle')">
+        <div class="menu-icon">✒️</div>
+        <div class="menu-text">
+          <div class="menu-title">GAME NAME STYLE</div>
+          <div class="menu-sub">Stylish fonts & symbols for FF / BGMI nicknames</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+      <div class="menu-card" onclick="showView('view-sensitivity-list')">
+        <div class="menu-icon">🎯</div>
+        <div class="menu-text">
+          <div class="menu-title">FF SENSITIVITY</div>
+          <div class="menu-sub">Recommended settings by mobile model</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+    </div>
+
+    <div class="feature-section">
+      <div class="eyebrow">WHY GWT CREATIONS</div>
+      <h2 class="feature-heading">Everything you need to<br>stand out and <span>aim better.</span></h2>
+      <p class="feature-lede">From stylish nicknames to tuned sensitivity setups — GWT Creations brings your FF & BGMI setup together in one place.</p>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon-badge">✒️</div>
+          <div class="feature-card-title">INSTANT NAME STYLES</div>
+          <div class="feature-card-desc">Type any name and get 90+ stylish font & symbol combos generated instantly.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-badge">📋</div>
+          <div class="feature-card-title">ONE-TAP COPY</div>
+          <div class="feature-card-desc">Copy a single style or all of them at once — ready to paste straight in-game.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-badge">🎯</div>
+          <div class="feature-card-title">TUNED SENSITIVITY</div>
+          <div class="feature-card-desc">Recommended FF sensitivity presets for 24+ popular gaming phones.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-badge">⭐</div>
+          <div class="feature-card-title">PIN YOUR FAVORITES</div>
+          <div class="feature-card-desc">Star the styles you love — they're saved and pinned to the top next time.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-badge">⌕</div>
+          <div class="feature-card-title">QUICK DEVICE SEARCH</div>
+          <div class="feature-card-desc">Search your exact phone model to jump straight to its settings.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-badge">🚀</div>
+          <div class="feature-card-title">FREE, NO SIGN-UP</div>
+          <div class="feature-card-desc">No account, no cost. Open it, generate your style, and get back in-game.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="compare-section">
+      <div class="eyebrow">WHY CHOOSE US</div>
+      <h2 class="feature-heading">Other tools <span>vs</span> GWT Creations</h2>
+      <p class="feature-lede">See why players stick with us instead of random name-style sites.</p>
+      <div class="compare-table">
+        <div class="compare-head">
+          <div class="ch-label">&nbsp;</div>
+          <div class="ch-others">Others</div>
+          <div class="ch-us">Us</div>
+        </div>
+        <div class="compare-row">
+          <div class="cr-label">Instant 90+ name styles</div>
+          <div><span class="cr-mark cr-no"></span></div>
+          <div class="cr-us"><span class="cr-mark cr-yes"></span></div>
+        </div>
+        <div class="compare-row">
+          <div class="cr-label">One-tap copy, no ads to dodge</div>
+          <div><span class="cr-mark cr-no"></span></div>
+          <div class="cr-us"><span class="cr-mark cr-yes"></span></div>
+        </div>
+        <div class="compare-row">
+          <div class="cr-label">Sensitivity presets for 24+ phones</div>
+          <div><span class="cr-mark cr-no"></span></div>
+          <div class="cr-us"><span class="cr-mark cr-yes"></span></div>
+        </div>
+        <div class="compare-row">
+          <div class="cr-label">Pin & save favorite styles</div>
+          <div><span class="cr-mark cr-no"></span></div>
+          <div class="cr-us"><span class="cr-mark cr-yes"></span></div>
+        </div>
+        <div class="compare-row">
+          <div class="cr-label">Free, no sign-up or login</div>
+          <div><span class="cr-mark cr-no"></span></div>
+          <div class="cr-us"><span class="cr-mark cr-yes"></span></div>
+        </div>
+        <div class="compare-row">
+          <div class="cr-label">Clutter-free, fast-loading page</div>
+          <div><span class="cr-mark cr-no"></span></div>
+          <div class="cr-us"><span class="cr-mark cr-yes"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-heading">OUR <span>WORK</span></div>
+    <div class="work-grid">
+      <div class="work-col">
+        <div class="work-icon">🎨</div>
+        <div class="work-title">NAME STYLING</div>
+        <div class="work-desc">Stylish font & symbol combos for standout nicknames</div>
+      </div>
+      <div class="work-col">
+        <div class="work-icon">⚙️</div>
+        <div class="work-title">SENSI CONFIGS</div>
+        <div class="work-desc">Tuned sensitivity setups by device for better aim</div>
+      </div>
+      <div class="work-col">
+        <div class="work-icon">🎬</div>
+        <div class="work-title">GAME CONTENT</div>
+        <div class="work-desc">Tips, edits & guides made for the FF/BGMI community</div>
+      </div>
+    </div>
+    <div class="founder-section">
+      <div class="eyebrow">THE PERSON BEHIND IT</div>
+      <h2 class="feature-heading">Meet the <span>Founder</span></h2>
+      <div class="founder-card">
+        <div class="founder-avatar">🧑‍💻</div>
+        <div>
+          <div class="founder-name">Toyash Sinsinwar</div>
+          <div class="founder-role">17-Year-Old Founder & Developer</div>
+          <div class="founder-tags">
+            <span class="founder-tag-chip">Content Creator</span>
+            <span class="founder-tag-chip">Video Editor</span>
+            <span class="founder-tag-chip">Web Developer</span>
+            <span class="founder-tag-chip">Gamer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAME STYLE VIEW -->
+  <div class="view" id="view-namestyle">
+    <button class="back-btn" onclick="showView('view-home')">← BACK</button>
+    <h1 class="page-title">GAME NAME STYLE</h1>
+    <p class="sub">Type your name, get stylish fonts, tap Copy, paste in-game</p>
+
+    <div class="input-box">
+      <input type="text" id="nameInput" placeholder="Enter your name e.g. Rahul" maxlength="30">
+      <button class="generate-btn" onclick="generateStyles()">GENERATE</button>
+    </div>
+
+    <div class="results-toolbar">
+      <button class="copy-all-btn" id="copyAllBtn" onclick="copyAllStyles()">📋 COPY ALL</button>
+    </div>
+    <div class="results" id="results">
+      <div class="empty-msg">Enter a name above and hit Generate</div>
+    </div>
+  </div>
+
+  <!-- SENSITIVITY: PHONE LIST VIEW -->
+  <div class="view" id="view-sensitivity-list">
+    <button class="back-btn" onclick="showView('view-home')">← BACK</button>
+    <h1 class="page-title">FF SENSITIVITY</h1>
+    <p class="sub">Select your mobile model</p>
+    <div class="search-box">
+      <input type="search" id="phoneSearch" placeholder="Search your phone model..." oninput="renderPhoneGrid(this.value)">
+    </div>
+    <div class="phone-grid" id="phoneGrid"></div>
+  </div>
+
+  <!-- SENSITIVITY: DETAIL VIEW -->
+  <div class="view" id="view-sensitivity-detail">
+    <button class="back-btn" onclick="showView('view-sensitivity-list')">← BACK</button>
+    <h2 class="page-title" id="phoneName"></h2>
+    <p class="sub">Recommended sensitivity settings (scale: 1-200, Free Look: 1-100)</p>
+    <div class="sens-list" id="sensList"></div>
+    <p class="disclaimer">These are recommended starting settings for smoother aim and better headshot consistency.
+    Fine-tune slightly to your own playstyle — no fixed settings guarantee 100% headshots on their own, practice and aim control still matter most.</p>
+  </div>
+
+  <footer>GWT CREATIONS &nbsp;•&nbsp; Founder & Developer: <b>Toyash Sinsinwar</b></footer>
+</div>
+
+<button class="scrolltop-btn" id="scrollTopBtn" aria-label="Scroll to top">↑</button>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- EQUALIZER WAVE COLUMNS ---------- */
+function buildEqColumn(container, barCount) {
+  for (let i = 0; i < barCount; i++) {
+    const bar = document.createElement("div");
+    bar.className = "eq-bar";
+    const width = 8 + Math.random() * 22;
+    const delay = (Math.random() * 1.4).toFixed(2);
+    const duration = (1 + Math.random() * 0.9).toFixed(2);
+    bar.style.width = width + "px";
+    bar.style.animationDelay = delay + "s";
+    bar.style.animationDuration = duration + "s";
+    container.appendChild(bar);
+  }
+}
+(function initEqColumns() {
+  const left = document.getElementById("eqLeft");
+  const right = document.getElementById("eqRight");
+  if (left) buildEqColumn(left, 22);
+  if (right) buildEqColumn(right, 22);
+})();
+
+/* ---------- VIEW SWITCHING ---------- */
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id === 'view-sensitivity-list') {
+    const s = document.getElementById('phoneSearch');
+    if (s) s.value = "";
+    renderPhoneGrid();
+  }
+}
+
+/* ---------- Scroll to top ---------- */
+(function initScrollTop() {
+  const btn = document.getElementById("scrollTopBtn");
+  if (!btn) return;
+  window.addEventListener("scroll", function() {
+    if (window.scrollY > 280) btn.classList.add("visible");
+    else btn.classList.remove("visible");
+  }, { passive: true });
+  btn.addEventListener("click", function() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+})();
+
+/* ---------- GAME NAME STYLE GENERATOR ---------- */
+const maps = {
+  "Bold Serif": { a:"𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳", A:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙", n:"𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗" },
+  "Italic": { a:"𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻", A:"𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡", n:"0123456789" },
+  "Bold Italic": { a:"𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛", A:"𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁", n:"0123456789" },
+  "Double Struck": { a:"𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫", A:"𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ", n:"𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡" },
+  "Fraktur": { a:"𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟", A:"𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅", n:"0123456789" },
+  "Monospace": { a:"𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣", A:"𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉", n:"0123456789" },
+  "Circled": { a:"ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ", A:"Ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ", n:"⓪①②③④⑤⑥⑦⑧⑨" },
+  "Squared": { a:"🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉", A:"🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉", n:"0123456789" },
+  "Cursive": { a:"𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃", A:"𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩", n:"0123456789" }
+};
+for (const key in maps) {
+  maps[key].aArr = Array.from(maps[key].a);
+  if (maps[key].A) maps[key].AArr = Array.from(maps[key].A);
+  maps[key].nArr = Array.from(maps[key].n);
+}
+
+const brackets = [
+  ["꧁", "꧂"], ["『", "』"], ["⌈", "⌉"], ["【", "】"], ["《", "》"],
+  ["⟦", "⟧"], ["⟬", "⟭"], ["「", "」"], ["⁅", "⁆"], ["≼", "≽"],
+  ["★彡", "彡★"], ["☆彡", "彡☆"], ["▁▂▃", "▃▂▁"], ["▄▀", "▀▄"], ["◤◢", "◥◣"],
+  ["◆", "◆"], ["◈", "◈"], ["✪", "✪"], ["☬", "☬"], ["✦", "✦"],
+  ["»", "«"], ["<", ">"], ["[", "]"], ["-", "-"], ["_", "_"],
+  [".", "."], ["/", "/"], ["|", "|"], ["•", "•"], ["~", "~"]
+];
+const accents = ["", "⚡", "🔥", "☠", "♛"];
+const fancyBrackets = brackets.slice(0, 20);
+const simpleBrackets = brackets.slice(20);
+let decorations = [];
+outer:
+for (const [l, r] of fancyBrackets) {
+  for (const ac of accents) {
+    decorations.push([l + ac, ac + r]);
+    if (decorations.length >= 91) break outer;
+  }
+}
+// Simple, plain decorations (no emoji accents) always included
+for (const [l, r] of simpleBrackets) {
+  decorations.push([l, r]);
+}
+
+function convert(name, map) {
+  let out = "";
+  for (const ch of name) {
+    if (/[a-z]/.test(ch)) {
+      out += map.aArr[ch.charCodeAt(0) - 97] || ch;
+    } else if (/[A-Z]/.test(ch)) {
+      out += (map.AArr || map.aArr)[ch.charCodeAt(0) - 65] || ch;
+    } else if (/[0-9]/.test(ch)) {
+      out += map.nArr[ch.charCodeAt(0) - 48] || ch;
+    } else {
+      out += ch;
+    }
+  }
+  return out;
+}
+
+function getFavs() {
+  try { return JSON.parse(localStorage.getItem("gwt_fav_styles") || "[]"); } catch (e) { return []; }
+}
+function saveFavs(arr) {
+  try { localStorage.setItem("gwt_fav_styles", JSON.stringify(arr)); } catch (e) {}
+}
+
+function generateStyles() {
+  const rawName = document.getElementById("nameInput").value.trim();
+  // Hard cap on length regardless of how the value was set (typed, pasted, or via devtools)
+  const name = rawName.slice(0, 30);
+  const resultsDiv = document.getElementById("results");
+  const copyAllBtn = document.getElementById("copyAllBtn");
+  resultsDiv.innerHTML = "";
+  if (!name) {
+    resultsDiv.innerHTML = '<div class="empty-msg">Please type a name first</div>';
+    copyAllBtn.classList.remove("visible");
+    return;
+  }
+  const cards = [];
+  for (const map of Object.values(maps)) {
+    cards.push(convert(name, map));
+  }
+  const mapValues = Object.values(maps);
+  decorations.forEach(([pre, suf], i) => {
+    const map = mapValues[i % mapValues.length];
+    cards.push(pre + convert(name, map) + suf);
+  });
+
+  const favs = getFavs();
+  const order = cards.map((_, i) => i).sort((a, b) => {
+    const fa = favs.includes(a) ? 1 : 0;
+    const fb = favs.includes(b) ? 1 : 0;
+    return fb - fa;
+  });
+
+  order.forEach((idx) => {
+    const text = cards[idx];
+    const card = document.createElement("div");
+    card.className = "style-card" + (favs.includes(idx) ? " pinned" : "");
+    const textDiv = document.createElement("div");
+    textDiv.className = "style-text";
+    textDiv.textContent = text;
+
+    const favBtn = document.createElement("button");
+    favBtn.className = "fav-btn" + (favs.includes(idx) ? " active" : "");
+    favBtn.textContent = favs.includes(idx) ? "★" : "☆";
+    favBtn.title = "Pin this style to the top";
+    favBtn.onclick = function() { toggleFav(idx); };
+
+    const btn = document.createElement("button");
+    btn.className = "copy-btn";
+    btn.textContent = "Copy";
+    btn.onclick = function() { copyText(btn, idx); };
+
+    card.appendChild(textDiv);
+    card.appendChild(favBtn);
+    card.appendChild(btn);
+    resultsDiv.appendChild(card);
+  });
+  window.__cardTexts = cards;
+  copyAllBtn.classList.add("visible");
+}
+
+function toggleFav(idx) {
+  let favs = getFavs();
+  if (favs.includes(idx)) favs = favs.filter(v => v !== idx);
+  else favs.push(idx);
+  saveFavs(favs);
+  generateStyles();
+}
+
+function copyAllStyles() {
+  const texts = window.__cardTexts || [];
+  if (!texts.length) return;
+  const blob = texts.join("\n");
+  function done() { showToast("All " + texts.length + " styles copied!"); }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(blob).then(done).catch(() => fallbackCopy(blob, done));
+  } else {
+    fallbackCopy(blob, done);
+  }
+}
+
+function copyText(btn, idx) {
+  const text = window.__cardTexts[idx];
+  function done() {
+    btn.textContent = "Copied";
+    btn.classList.add("copied");
+    setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 1500);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+  } else {
+    fallbackCopy(text, done);
+  }
+}
+
+let toastTimer = null;
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2000);
+}
+function fallbackCopy(text, cb) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand("copy"); } catch (e) {}
+  document.body.removeChild(ta);
+  cb();
+}
+document.getElementById("nameInput").addEventListener("keydown", function(e){
+  if (e.key === "Enter") generateStyles();
+});
+
+/* ---------- FF SENSITIVITY (scale 1-200, Free Look 1-100) ---------- */
+const phones = {
+  "Realme P3 Ultra": { general: 180, redDot: 175, scope2x: 150, scope4x: 120, sniper: 85, freeLook: 100, dpi: 450 },
+  "Motorola G67": { general: 160, redDot: 150, scope2x: 130, scope4x: 100, sniper: 70, freeLook: 95, dpi: 400 },
+  "Infinix GT 30 Pro": { general: 190, redDot: 180, scope2x: 160, scope4x: 130, sniper: 90, freeLook: 100, dpi: 480 },
+  "Samsung Galaxy A55": { general: 170, redDot: 160, scope2x: 140, scope4x: 110, sniper: 75, freeLook: 96, dpi: 420 },
+  "Samsung Galaxy S26": { general: 195, redDot: 185, scope2x: 165, scope4x: 135, sniper: 92, freeLook: 100, dpi: 500 },
+  "iPhone 17 Pro Max": { general: 192, redDot: 182, scope2x: 162, scope4x: 132, sniper: 90, freeLook: 100, dpi: 490 },
+  "Poco X6 Pro": { general: 185, redDot: 170, scope2x: 150, scope4x: 120, sniper: 88, freeLook: 100, dpi: 460 },
+  "iQOO Z9": { general: 175, redDot: 165, scope2x: 145, scope4x: 115, sniper: 80, freeLook: 98, dpi: 440 },
+  "Redmi Note 13 Pro": { general: 165, redDot: 155, scope2x: 135, scope4x: 105, sniper: 72, freeLook: 96, dpi: 410 },
+  "OnePlus Nord CE4": { general: 178, redDot: 168, scope2x: 148, scope4x: 118, sniper: 82, freeLook: 99, dpi: 445 },
+  "Vivo V30": { general: 168, redDot: 158, scope2x: 138, scope4x: 108, sniper: 74, freeLook: 97, dpi: 415 },
+  "Oppo Reno 12": { general: 172, redDot: 162, scope2x: 142, scope4x: 112, sniper: 78, freeLook: 98, dpi: 425 },
+  "iQOO Neo 9 Pro": { general: 196, redDot: 186, scope2x: 166, scope4x: 136, sniper: 93, freeLook: 100, dpi: 495 },
+  "Poco F6": { general: 194, redDot: 184, scope2x: 164, scope4x: 134, sniper: 91, freeLook: 100, dpi: 485 },
+  "Realme GT 6": { general: 191, redDot: 181, scope2x: 161, scope4x: 131, sniper: 89, freeLook: 100, dpi: 475 },
+  "OnePlus 12R": { general: 193, redDot: 183, scope2x: 163, scope4x: 133, sniper: 90, freeLook: 100, dpi: 480 },
+  "ASUS ROG Phone 8": { general: 200, redDot: 190, scope2x: 170, scope4x: 140, sniper: 95, freeLook: 100, dpi: 520 },
+  "Black Shark 5 Pro": { general: 198, redDot: 188, scope2x: 168, scope4x: 138, sniper: 94, freeLook: 100, dpi: 510 },
+  "Nothing Phone 2a": { general: 173, redDot: 163, scope2x: 143, scope4x: 113, sniper: 76, freeLook: 97, dpi: 430 },
+  "Samsung Galaxy S23 FE": { general: 182, redDot: 172, scope2x: 152, scope4x: 122, sniper: 84, freeLook: 99, dpi: 455 },
+  "Redmi K70": { general: 188, redDot: 178, scope2x: 158, scope4x: 128, sniper: 87, freeLook: 100, dpi: 465 },
+  "Vivo T3 Pro": { general: 176, redDot: 166, scope2x: 146, scope4x: 116, sniper: 79, freeLook: 98, dpi: 435 },
+  "Moto Edge 50 Pro": { general: 179, redDot: 169, scope2x: 149, scope4x: 119, sniper: 81, freeLook: 99, dpi: 442 },
+  "Tecno Pova 6 Pro": { general: 163, redDot: 153, scope2x: 133, scope4x: 103, sniper: 71, freeLook: 95, dpi: 405 }
+};
+
+function renderPhoneGrid(filter) {
+  const grid = document.getElementById("phoneGrid");
+  grid.innerHTML = "";
+  const q = (filter || "").trim().toLowerCase();
+  const names = Object.keys(phones).filter(name => name.toLowerCase().includes(q));
+  if (!names.length) {
+    grid.innerHTML = '<div class="no-results">No phones match your search</div>';
+    return;
+  }
+  names.forEach(name => {
+    const card = document.createElement("div");
+    card.className = "phone-card";
+
+    const icon = document.createElement("span");
+    icon.className = "phone-icon";
+    icon.textContent = "📱";
+
+    const label = document.createTextNode(name);
+
+    card.appendChild(icon);
+    card.appendChild(label);
+    card.onclick = function() { showPhoneSensitivity(name); };
+    grid.appendChild(card);
+  });
+}
+
+function showPhoneSensitivity(name) {
+  if (!Object.prototype.hasOwnProperty.call(phones, name)) return;
+  const s = phones[name];
+  document.getElementById("phoneName").textContent = name;
+  const list = document.getElementById("sensList");
+  const rows = [
+    ["General", s.general, 200],
+    ["Red Dot", s.redDot, 200],
+    ["2x Scope", s.scope2x, 200],
+    ["4x Scope", s.scope4x, 200],
+    ["Sniper Scope", s.sniper, 200],
+    ["Free Look", s.freeLook, 100],
+    ["DPI", s.dpi, 800]
+  ];
+  list.innerHTML = "";
+  rows.forEach(([label, value, max]) => {
+    const numericValue = Number(value) || 0;
+    const pct = Math.max(0, Math.min(100, (numericValue / max) * 100));
+
+    const row = document.createElement("div");
+    row.className = "sens-row";
+
+    const top = document.createElement("div");
+    top.className = "sens-top";
+
+    const labelSpan = document.createElement("span");
+    labelSpan.className = "sens-label";
+    labelSpan.textContent = label;
+
+    const valueSpan = document.createElement("span");
+    valueSpan.className = "sens-value";
+    valueSpan.textContent = String(numericValue);
+
+    top.appendChild(labelSpan);
+    top.appendChild(valueSpan);
+
+    const track = document.createElement("div");
+    track.className = "sens-bar-track";
+    const fill = document.createElement("div");
+    fill.className = "sens-bar-fill";
+    fill.style.width = pct + "%";
+    track.appendChild(fill);
+
+    row.appendChild(top);
+    row.appendChild(track);
+    list.appendChild(row);
+  });
+  showView('view-sensitivity-detail');
+}
+</script>
+</body>
+</html>
